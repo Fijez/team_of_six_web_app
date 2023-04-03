@@ -1,4 +1,9 @@
 package team.of.six.firstwebapp.repository;
 
-public interface MediaRepository extends org.springframework.data.jpa.repository.JpaRepository<team.of.six.firstwebapp.entity.Media, java.lang.Long> {
+import org.springframework.data.jpa.repository.JpaRepository;
+import team.of.six.firstwebapp.entity.Media;
+
+public interface MediaRepository extends JpaRepository<Media, Long>
+{
+
 }

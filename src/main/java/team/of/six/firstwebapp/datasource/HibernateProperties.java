@@ -1,4 +1,4 @@
-package ru.rt.it.bonuslab.configuration.datasource;
+package team.of.six.firstwebapp.datasource;
 
 import lombok.Getter;
 import lombok.Setter;

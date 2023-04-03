@@ -1,66 +1,27 @@
-package ru.rt.it.bonuslab.configuration.datasource;
+package team.of.six.firstwebapp.datasource;
 
-import lombok.AllArgsConstructor;
-import net.kaczmarzyk.spring.data.jpa.web.SpecificationArgumentResolver;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import ru.rt.it.bonuslab.repository.AdminRepository;
-import ru.rt.it.bonuslab.repository.AdminRepositoryImpl;
+import team.of.six.firstwebapp.entity.Media;
 
 import javax.sql.DataSource;
-import java.util.List;
+import java.util.Objects;
 
 @Configuration
 @EnableTransactionManagement
-@AllArgsConstructor
-public class JpaConfiguration implements WebMvcConfigurer
+@EnableJpaRepositories(
+    basePackageClasses = Media.class,
+    entityManagerFactoryRef = "todosEntityManagerFactory",
+    transactionManagerRef = "todosTransactionManager"
+)
+public class JpaConfiguration
 {
-  private final HibernateProperties hibernateProperties;
 
-  @Bean
-  @Primary
-  @ConfigurationProperties("spring.datasource")
-  public DataSourceProperties dataSourceProperties() {
-    return new DataSourceProperties();
-  }
-
-  @Primary
-  @Bean
-  public DataSource dataSource(DataSourceProperties properties)
-  {
-    return properties.initializeDataSourceBuilder().build();
-  }
-
-  @Bean
-  public AdminRepository adminRepository()
-  {
-    return new AdminRepositoryImpl();
-  }
-
-  @Override
-  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers)
-  {
-    argumentResolvers.add(new SpecificationArgumentResolver());
-  }
-
-  @Bean
-  public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
-    var em = new LocalContainerEntityManagerFactoryBean();
-    em.setDataSource(dataSource);
-    em.setPackagesToScan(new String[] { "ru.rt.it.bonuslab.model", "ru.rt.it.bonuslabcommons.model.entities" });
-    em.setJpaProperties(hibernateProperties);
-
-    var vendorAdapter = new HibernateJpaVendorAdapter();
-    em.setJpaVendorAdapter(vendorAdapter);
-
-    return em;
-  }
 }
