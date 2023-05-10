@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+  <changeSet id="create_entity_comment" author="admin">
+    <createTable tableName="comment">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="comment" type="text"/>
+      <column name="users" type="bigint"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="create_entity_media" author="admin">
+    <createTable tableName="media">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="name" type="text"/>
+      <column name="value" type="blob"/>
+    </createTable>
+  </changeSet>
+
+   <changeSet id="create_entity_text" author="admin">
+    <createTable tableName="text">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="name" type="text"/>
+      <column name="value" type="text"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="create_entity_users" author="admin">
+    <createTable tableName="users">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="name" type="text"/>
+      <column name="email" type="text"/>
+    </createTable>
+    <createIndex tableName="users" indexName="users_email">
+      <column name="email"/>
+    </createIndex>
+    <createIndex tableName="users" indexName="users_name">
+      <column name="name"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="create_foreign_key_users_comment" author="admin">
+    <addForeignKeyConstraint baseTableName="comment" baseColumnNames="users" constraintName="fk_comment_users"
+                             referencedTableName="users"
+                             referencedColumnNames="id"/>
+  </changeSet>
+</databaseChangeLog>
